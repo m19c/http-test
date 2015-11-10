@@ -24,5 +24,22 @@
   "bugs": {
     "url": "https://github.com/MrBoolean/http-test/issues"
   },
-  "homepage": "https://github.com/MrBoolean/http-test#readme"
+  "homepage": "https://github.com/MrBoolean/http-test#readme",
+  "devDependencies": {
+    "babel-eslint": "^4.1.5",
+    "eslint": "^1.9.0",
+    "eslint-config-airbnb": "^1.0.0",
+    "eslint-plugin-react": "^3.8.0",
+    "gulp": "^3.9.0",
+    "gulp-eslint": "^1.1.0",
+    "gulp-istanbul": "^0.10.2",
+    "gulp-mocha": "^2.1.3",
+    "pre-commit": "^1.1.2",
+    "should": "^7.1.1"
+  },
+  "dependencies": {
+    "chalk": "^1.1.1",
+    "request": "^2.65.0"
+  },
+  "pre-commit": ["test"]
 }
