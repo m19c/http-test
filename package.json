@@ -1,0 +1,28 @@
+{
+  "name": "http-test",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MrBoolean/http-test.git"
+  },
+  "keywords": [
+    "http",
+    "test",
+    "availability",
+    "check",
+    "response",
+    "time",
+    "time"
+  ],
+  "author": "Marc Binder <marcandrebinder@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MrBoolean/http-test/issues"
+  },
+  "homepage": "https://github.com/MrBoolean/http-test#readme"
+}
