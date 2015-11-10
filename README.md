@@ -7,32 +7,23 @@ npm i --save http-test
 
 # Example
 ```javascript
-var Suite = require('http-test/suite');
-var Test = require('http-test/test');
-var container = new Suite({
-  name: 'GitHub',
-  request: {
-    headers: {
-      AccessToken: 'abc'
-    }
-  },
-  threshold: {
-    slow: 300,
-    broken: 1000
-  }
+var ht = require('http-test');
+var suite = ht({
+  name: 'http-test'
 });
 
-container
-  .add({
-    request: {
-      url: 'http://www.github.com/api/some'
-    },
-    threshold: {
-      slow: 1000,
-      broken: 2000
-    }
+suite
+  .add(
+    ht.test({ request: { url: 'http://jsonplaceholder.typicode.com/posts/1' } })
+      .threshold(10, suite.PASSED, ['fast'])
+      .threshold(100, suite.FAILED)
+      .shouldBeSuccessful()
+  )
+  .add('http://www.google.com')
+  .run()
+  .then(function handleResult(result) {
+    // ...
   })
-  .add('http://www.github.com/api/user')
 ;
 ```
 

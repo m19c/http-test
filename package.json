@@ -38,9 +38,14 @@
     "should": "^7.1.1"
   },
   "dependencies": {
+    "bluebird": "^3.0.5",
     "chalk": "^1.1.1",
+    "eventemitter2": "^0.4.14",
     "lodash.defaultsdeep": "^3.10.0",
+    "lodash.groupby": "^3.1.1",
+    "lodash.isnumber": "^3.0.1",
     "lodash.isstring": "^3.0.1",
+    "lodash.merge": "^3.3.2",
     "request": "^2.65.0"
   },
   "pre-commit": [
