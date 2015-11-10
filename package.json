@@ -1,7 +1,7 @@
 {
   "name": "http-test",
-  "version": "0.0.1",
   "description": "",
+  "version": "0.0.1",
   "main": "index.js",
   "scripts": {
     "test": "gulp"
@@ -39,7 +39,11 @@
   },
   "dependencies": {
     "chalk": "^1.1.1",
+    "lodash.defaultsdeep": "^3.10.0",
+    "lodash.isstring": "^3.0.1",
     "request": "^2.65.0"
   },
-  "pre-commit": ["test"]
+  "pre-commit": [
+    "test"
+  ]
 }

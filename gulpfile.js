@@ -6,10 +6,9 @@ var istanbul = require('gulp-istanbul');
 gulp.task('lint', function lintJs() {
   return gulp
     .src([
-      'lib/**/*.js',
-      'test/**/*.test.js',
-      'index.js',
-      'gulpfile.js'
+      '!node_modules/**/*',
+      '!dist/**/*',
+      '**/*.js'
     ])
     .pipe(eslint())
     .pipe(eslint.format())
@@ -20,8 +19,10 @@ gulp.task('lint', function lintJs() {
 gulp.task('test.instrument', function instrument() {
   return gulp
     .src([
-      'lib/**/*.js',
-      'index.js'
+      '!node_modules/**/*',
+      '!dist/**/*',
+      '!gulpfile.js',
+      '**/*.js'
     ])
     .pipe(istanbul({
       includeUntested: true

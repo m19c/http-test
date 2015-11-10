@@ -5,6 +5,37 @@
 npm i --save http-test
 ```
 
+# Example
+```javascript
+var Suite = require('http-test/suite');
+var Test = require('http-test/test');
+var container = new Suite({
+  name: 'GitHub',
+  request: {
+    headers: {
+      AccessToken: 'abc'
+    }
+  },
+  threshold: {
+    slow: 300,
+    broken: 1000
+  }
+});
+
+container
+  .add({
+    request: {
+      url: 'http://www.github.com/api/some'
+    },
+    threshold: {
+      slow: 1000,
+      broken: 2000
+    }
+  })
+  .add('http://www.github.com/api/user')
+;
+```
+
 # License
 Copyright (c) 2015 Marc Binder <marcandrebinder@gmail.com>
 
