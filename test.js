@@ -5,23 +5,22 @@
 var Promise = require('bluebird');
 var request = Promise.promisify(require('request'));
 var isNumber = require('lodash.isnumber');
-var defaults = require('lodash.defaultsdeep');
+var inherit = require('util').inherits;
 var merge = require('lodash.merge');
 var isBoolean = require('lodash.isboolean');
 var validate = require('./util/validate');
+var Base = require('./base');
+var Suite = require('./suite');
 
 function Test(options, suite) {
-  options = options || {};
+  Test.super_.apply(this, [options]);
 
-  if (suite) {
+  if (suite && suite instanceof Suite) {
     this.suite = suite;
   }
-
-  this.req = defaults({}, options.req || {});
-  this.spec = defaults({
-    thresholds: []
-  }, options.spec);
 }
+
+inherit(Test, Base);
 
 Test.PASSED = 'passed';
 Test.FAILED = 'failed';
@@ -38,7 +37,7 @@ Test.prototype.threshold = function threshold(ms, mark, flags) {
 
   this.spec.thresholds.push({
     threshold: ms,
-    mark: mark,
+    mark: mark || Test.PASSED,
     flags: flags || []
   });
 
@@ -59,21 +58,19 @@ Test.prototype.run = function run() {
 
   return request(current.req)
     .then(function handleRes(res) {
-      current.res = res;
+      current.res = res.toJSON();
       test.suite.emit('response', current);
 
       return Promise.resolve(current);
     })
     .catch(function handleErr(err) {
       current.err = err;
+      test.suite.emit('error', err);
+
       return Promise.resolve(current);
     })
     .then(function runValidator(item) {
-      item = {
-        test: item,
-        status: validate(item)
-      };
-
+      item.status = validate(item);
       test.suite.emit('test', item);
 
       return item;

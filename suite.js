@@ -8,6 +8,7 @@ var inherit = require('util').inherits;
 var isString = require('lodash.isstring');
 var through2 = require('through2');
 var Test = require('./test');
+var Base = require('./base');
 
 /**
  * Creates a new suite.
@@ -17,16 +18,15 @@ var Test = require('./test');
 function Suite(options) {
   options = options || {};
 
-  Suite.super_.apply(this, arguments);
-  this._ee = new EventEmitter();
+  Suite.super_.apply(this, [options]);
 
+  this._ee = new EventEmitter();
   this.name = options.name || null;
   this.description = options.description || null;
-
   this.tests = options.tests || [];
 }
 
-inherit(Suite, Test);
+inherit(Suite, Base);
 
 /**
  * Adds a listener to the end of the listeners array for the specified event.
@@ -104,14 +104,7 @@ Suite.prototype.run = function run() {
           description: suite.description
         },
         tests: result.map(function mapResult(item) {
-          if (item.suite) {
-            return item;
-          }
-
-          return {
-            req: item.test.req,
-            status: item.status
-          };
+          return item;
         })
       };
     })
@@ -131,10 +124,7 @@ Suite.prototype.runAsStream = function runAsStream() {
   });
 
   function onTest(item) {
-    stream.push({
-      req: item.test.req,
-      status: item.status
-    });
+    stream.push(item);
   }
 
   self

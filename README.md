@@ -1,4 +1,6 @@
-# http-test
+http-test
+=========
+A simple and robust way to test your http endpoints.
 
 # Install
 ```
@@ -8,20 +10,14 @@ npm i --save http-test
 # Example
 ```javascript
 var ht = require('http-test');
-var suite = ht({
-  name: 'http-test'
-});
 
-suite
-  .add(
-    ht.test({ request: { url: 'http://jsonplaceholder.typicode.com/posts/1' } })
-      .threshold(10, suite.PASSED, ['fast'])
-      .threshold(100, suite.FAILED)
-      .shouldBeSuccessful()
-  )
+ht({
+  name: 'http-test'
+})
   .add('http://www.google.com')
+  .add('http://www.creativemarket.com')
   .run()
-  .then(function handleResult(result) {
+  .then(function(result) {
     // ...
   })
 ;

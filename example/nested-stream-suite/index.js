@@ -1,5 +1,6 @@
 var ht = require('../../');
 var through2 = require('through2');
+var util = require('util');
 var os = require('os');
 var stream;
 var main = ht({ name: 'Main Suite' });
@@ -45,7 +46,8 @@ main
 stream = main.runAsStream();
 stream
   .pipe(through2.obj(function eachTest(test, encoding, next) {
-    this.push(JSON.stringify(test, null, 2) + os.EOL);
+    console.log(Object.keys(test));
+    this.push(util.format('%s > %s [%s]', test.suite, test.res.request.uri.href, test.status.status) + os.EOL);
     next();
   }))
   .pipe(process.stdout)
