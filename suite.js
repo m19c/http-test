@@ -23,7 +23,7 @@ function Suite(options) {
   this.name = options.name || null;
   this.description = options.description || null;
 
-  this.tests = [];
+  this.tests = options.tests || [];
 }
 
 inherit(Suite, Test);
@@ -72,16 +72,29 @@ Suite.prototype.add = function add(item) {
 
 Suite.prototype.run = function run() {
   var suite = this;
+  var offAny = [];
 
-  function broadcast() {
+  function broadcast(test) {
+    suite.emit('test', test);
   }
+
+  function walk(item) {
+    if (!(item instanceof Suite)) {
+      return;
+    }
+
+    item.on('test', broadcast);
+    offAny.push(function off() {
+      item.off('test', broadcast);
+    });
+
+    item.tests.forEach(walk);
+  }
+
+  this.tests.forEach(walk);
 
   return Promise
     .map(this.tests, function each(item) {
-      if (item.suite !== suite) {
-        console.log('nested', item);
-      }
-
       return item.run();
     })
     .then(function summarize(result) {
@@ -101,6 +114,11 @@ Suite.prototype.run = function run() {
           };
         })
       };
+    })
+    .finally(function unbindBroadcasts() {
+      offAny.forEach(function eachOff(off) {
+        off();
+      });
     })
   ;
 };

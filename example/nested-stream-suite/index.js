@@ -1,27 +1,48 @@
 var ht = require('../../');
 var through2 = require('through2');
 var os = require('os');
-
 var stream;
-var suite = ht({
+var main = ht({ name: 'Main Suite' });
+var jpa;
+var google;
+
+jpa = ht({
   name: 'JsonPlaceholder API',
   req: {
     baseUrl: 'http://jsonplaceholder.typicode.com'
   },
   spec: {
     thresholds: [
-      { threshold: 50, mark: 'passed', flags: ['fast'] },
-      { threshold: 200, mark: 'passed', flags: ['ok'] },
-      { threshold: 600, mark: 'passed', flags: ['slow'] },
-      { threshold: 1000, mark: 'passed', flags: ['awful'] }
+      { threshold: 50, mark: true, flags: ['fast'] },
+      { threshold: 100, mark: true, flags: ['ok'] },
+      { threshold: 500, mark: true, flags: ['fast'] }
     ]
   }
 });
+jpa
+  .add('/posts/1')
+  .add('/posts/2')
+  .add('/doesnt-exist/1337')
+;
 
-suite.add('/');
-suite.add('/not-found');
+google = ht({
+  name: 'Google',
+  req: {
+    baseUrl: 'http://www.google.com'
+  }
+});
+google
+  .add('/')
+  .add('/mail')
+;
 
-stream = suite.runAsStream();
+main
+  .add('http://www.heise.de')
+  .add(jpa)
+  .add(google)
+;
+
+stream = main.runAsStream();
 stream
   .pipe(through2.obj(function eachTest(test, encoding, next) {
     this.push(JSON.stringify(test, null, 2) + os.EOL);
