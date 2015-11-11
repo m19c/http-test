@@ -5,18 +5,17 @@ var suite = ht({
 
 suite
   .add(
-    ht.test({ request: { url: 'http://jsonplaceholder.typicode.com/posts/1' } })
-      .threshold(5, suite.PASSED, ['fast as hell'])
-      .threshold(200, suite.PASSED, ['fast'])
-      .threshold(500, suite.PASSED, ['slow'])
-      .threshold(1000, suite.FAILED)
-      .shouldBeSuccessful()
+    ht.test({ req: { url: 'http://jsonplaceholder.typicode.com/posts/1' } })
+      .threshold(5, ht.Test.PASSED, ['fast as hell'])
+      .threshold(200, ht.Test.PASSED, ['fast'])
+      .threshold(500, ht.Test.PASSED, ['slow'])
+      .threshold(1000, ht.Test.FAILED, ['awful'])
   )
   .add('http://this-does-not-exist-really-really-really.com')
 ;
 
 suite.run()
   .then(function handleResult(result) {
-    console.log(result);
+    console.log(JSON.stringify(result, null, 2));
   })
 ;
