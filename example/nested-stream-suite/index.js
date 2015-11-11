@@ -46,8 +46,7 @@ main
 stream = main.runAsStream();
 stream
   .pipe(through2.obj(function eachTest(test, encoding, next) {
-    console.log(Object.keys(test));
-    this.push(util.format('%s > %s [%s]', test.suite, test.res.request.uri.href, test.status.status) + os.EOL);
+    this.push(util.format('%s > %s [%s]', '', test.res.request.uri.href, test.status.status) + os.EOL);
     next();
   }))
   .pipe(process.stdout)

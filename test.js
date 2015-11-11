@@ -10,12 +10,11 @@ var merge = require('lodash.merge');
 var isBoolean = require('lodash.isboolean');
 var validate = require('./util/validate');
 var Base = require('./base');
-var Suite = require('./suite');
 
 function Test(options, suite) {
   Test.super_.apply(this, [options]);
 
-  if (suite && suite instanceof Suite) {
+  if (suite) {
     this.suite = suite;
   }
 }
