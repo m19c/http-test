@@ -1,17 +1,22 @@
-var ht = require('../');
+var ht = require('../../');
 var suite = ht({
-  name: 'JsonPlaceholder API'
+  name: 'JsonPlaceholder API',
+  req: {
+    baseUrl: 'http://jsonplaceholder.typicode.com'
+  },
+  spec: {
+    thresholds: [
+      { threshold: 50, mark: true, flags: ['fast'] },
+      { threshold: 100, mark: true, flags: ['ok'] },
+      { threshold: 500, mark: true, flags: ['fast'] }
+    ]
+  }
 });
 
 suite
-  .add(
-    ht.test({ req: { url: 'http://jsonplaceholder.typicode.com/posts/1' } })
-      .threshold(5, ht.Test.PASSED, ['fast as hell'])
-      .threshold(200, ht.Test.PASSED, ['fast'])
-      .threshold(500, ht.Test.PASSED, ['slow'])
-      .threshold(1000, ht.Test.FAILED, ['awful'])
-  )
-  .add('http://this-does-not-exist-really-really-really.com')
+  .add('/posts/1')
+  .add('/posts/2')
+  .add('/doesnt-exist/1337')
 ;
 
 suite.run()

@@ -23,6 +23,7 @@ gulp.task('test.instrument', function instrument() {
       '!dist/**/*',
       '!example/**/*',
       '!gulpfile.js',
+      '!test/**/*',
       '**/*.js'
     ])
     .pipe(istanbul({

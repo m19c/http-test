@@ -6,6 +6,7 @@ var Promise = require('bluebird');
 var EventEmitter = require('eventemitter2').EventEmitter2;
 var inherit = require('util').inherits;
 var isString = require('lodash.isstring');
+var through2 = require('through2');
 var Test = require('./test');
 
 /**
@@ -22,7 +23,7 @@ function Suite(options) {
   this.name = options.name || null;
   this.description = options.description || null;
 
-  this.stack = [];
+  this.tests = [];
 }
 
 inherit(Suite, Test);
@@ -44,6 +45,11 @@ Suite.prototype.emit = function emit(name, args) {
   return this;
 };
 
+Suite.prototype.off = function off(name, callback) {
+  this._ee.off(name, callback);
+  return this;
+};
+
 /**
  * An abstract method which accepts suites, tests and urls (strings).
  *
@@ -60,15 +66,22 @@ Suite.prototype.add = function add(item) {
   }
 
   item.suite = this;
-  this.stack.push(item);
+  this.tests.push(item);
   return this;
 };
 
 Suite.prototype.run = function run() {
   var suite = this;
 
+  function broadcast() {
+  }
+
   return Promise
-    .map(this.stack, function each(item) {
+    .map(this.tests, function each(item) {
+      if (item.suite !== suite) {
+        console.log('nested', item);
+      }
+
       return item.run();
     })
     .then(function summarize(result) {
@@ -90,6 +103,31 @@ Suite.prototype.run = function run() {
       };
     })
   ;
+};
+
+Suite.prototype.runAsStream = function runAsStream() {
+  var self = this;
+  var stream = through2.obj(function eachTest(test, encoding, next) {
+    this.push(test);
+    next();
+  });
+
+  function onTest(item) {
+    stream.push({
+      req: item.test.req,
+      status: item.status
+    });
+  }
+
+  self
+    .on('test', onTest)
+    .run()
+    .finally(function unbindOnTest() {
+      self.off('test', onTest);
+    })
+  ;
+
+  return stream;
 };
 
 module.exports = Suite;

@@ -1,4 +1,4 @@
-var ht = require('../');
+var ht = require('../../');
 var main = ht({ name: 'Main Suite' });
 var jpa;
 var google;

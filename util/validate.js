@@ -20,7 +20,7 @@ module.exports = function validate(item) {
     result.status = 'failed';
   }
 
-  if (item.spec.thresholds && item.spec.thresholds.length > 0) {
+  if (item.status === 'passed' && item.spec.thresholds && item.spec.thresholds.length > 0) {
     thresholds = clone(item.spec.thresholds);
     thresholds.sort(function sortByThreshold(thresholdA, thresholdB) {
       return thresholdA.threshold > thresholdB.threshold;
