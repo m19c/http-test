@@ -1,3 +1,7 @@
+/**
+ * @module http-test/util/validate
+ */
+
 var isSuccess = require('is-success');
 var clone = require('lodash.clone');
 

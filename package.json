@@ -40,7 +40,6 @@
   },
   "dependencies": {
     "bluebird": "^3.0.5",
-    "chalk": "^1.1.1",
     "eventemitter2": "^0.4.14",
     "is-success": "^1.0.0",
     "lodash.clone": "^3.0.3",
