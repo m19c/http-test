@@ -21,6 +21,7 @@ gulp.task('test.instrument', function instrument() {
     .src([
       '!node_modules/**/*',
       '!dist/**/*',
+      '!example/**/*',
       '!gulpfile.js',
       '**/*.js'
     ])
