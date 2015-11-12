@@ -22,7 +22,6 @@ describe('http-test/test', function testTestSuite() {
     Test.INVALID.should.equal('invalid');
   });
 
-
   describe('#constructor', function constructorTestSuite() {
     it('accepts an object with options', function acceptsOptionsTest() {
       var options = {
