@@ -2,7 +2,7 @@ http-test
 =========
 A simple and robust way to test your http endpoints.
 
-[![Code Climate](https://codeclimate.com/github/MrBoolean/http-test/badges/gpa.svg)](https://codeclimate.com/github/MrBoolean/http-test) [![Test Coverage](https://codeclimate.com/github/MrBoolean/http-test/badges/coverage.svg)](https://codeclimate.com/github/MrBoolean/http-test/coverage)
+[![Build Status](https://travis-ci.org/MrBoolean/http-test.svg?branch=master)](https://travis-ci.org/MrBoolean/http-test) [![Code Climate](https://codeclimate.com/github/MrBoolean/http-test/badges/gpa.svg)](https://codeclimate.com/github/MrBoolean/http-test) [![Test Coverage](https://codeclimate.com/github/MrBoolean/http-test/badges/coverage.svg)](https://codeclimate.com/github/MrBoolean/http-test/coverage)
 
 # Install
 ```
