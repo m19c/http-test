@@ -51,6 +51,7 @@ Test.prototype.run = function run() {
     .then(function runValidator(item) {
       item.status = validate(item);
       test.suite.emit('test', item);
+      test.suite.emit('broadcast.test', item);
 
       return item;
     })

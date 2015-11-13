@@ -45,8 +45,4 @@ describe('http-test/test', function testTestSuite() {
       test.suite.should.equal(suite);
     });
   });
-
-  describe('#run', function runTestSuite() {
-    it('returns a promise');
-  });
 });

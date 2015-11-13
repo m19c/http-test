@@ -59,6 +59,29 @@ Suite.prototype.off = function off(name, callback) {
   return this;
 };
 
+Suite.prototype.hasListener = function hasListener(name, callback) {
+  var affected = this._ee._events[name];
+  var index;
+
+  if (!affected) {
+    return false;
+  }
+
+  if (!callback) {
+    return true;
+  }
+
+  if (Array.isArray(affected) && callback) {
+    for (index = 0; index < affected.length; index++) {
+      if (callback === affected[index]) {
+        return true;
+      }
+    }
+  }
+
+  return affected === callback;
+};
+
 /**
  * An abstract method which accepts suites, tests and urls (strings).
  *
@@ -92,10 +115,12 @@ Suite.prototype.run = function run() {
       return;
     }
 
-    item.on('test', broadcast);
-    offAny.push(function off() {
-      item.off('test', broadcast);
-    });
+    if (!item.hasListener('broadcast.test')) {
+      item.on('broadcast.test', broadcast);
+      offAny.push(function off() {
+        item.off('broadcast.test', broadcast);
+      });
+    }
 
     item.tests.forEach(walk);
   }
@@ -141,6 +166,7 @@ Suite.prototype.runAsStream = function runAsStream() {
     .run()
     .finally(function unbindOnTest() {
       self.off('test', onTest);
+      stream.end();
     })
   ;
 

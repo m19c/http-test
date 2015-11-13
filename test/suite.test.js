@@ -1,3 +1,5 @@
+var nock = require('nock');
+var through2 = require('through2');
 var Suite = require('../suite');
 var Test = require('../test');
 var Base = require('../base');
@@ -118,11 +120,89 @@ describe('http-test/suite', function suiteTestSuite() {
     });
   });
 
-  describe('#run', function runTestSuite() {
-    it('returns a promise');
+  describe('#hasListener', function hasListenerTest() {
+    it('returns `true` if a single listener already exist', function existTest() {
+      var suite = new Suite();
+
+      function someListener() {}
+
+      suite.hasListener('some').should.be.false();
+
+      suite.on('some', someListener);
+
+      suite.hasListener('some').should.be.true();
+      suite.hasListener('some', function noop() {}).should.be.false();
+      suite.hasListener('some', someListener).should.be.true();
+    });
+
+    it('returns `true` if a multiple listeners already present', function existTest() {
+      var suite = new Suite();
+
+      function someListener() {}
+
+      suite.hasListener('some').should.be.false();
+
+      suite.on('some', someListener);
+      suite.on('some', function noop() {});
+
+      suite.hasListener('some').should.be.true();
+      suite.hasListener('some', someListener).should.be.true();
+    });
   });
 
-  describe('#runAsStream', function runAsStreamTestSuite() {
-    it('returns a object stream');
+  describe('functional testing', function functionalTestSuite() {
+    var baseUrl = 'http://www.http-test.com';
+    var mock;
+
+    beforeEach(function runBeforeEach() {
+      mock = nock(baseUrl);
+
+      mock.get('/').delay(200).reply(200, {});
+      mock.get('/api/user').delay(200).reply(200, {});
+    });
+
+    afterEach(function runAfterEach() {
+      mock.done();
+    });
+
+    it('broadcasts all events to sub suites', function broadcastTest() {
+      var main = new Suite();
+      var httpTestCom = new Suite({ req: { baseUrl: baseUrl } });
+      var httpTestComApi = new Suite({ req: { baseUrl: baseUrl + '/api' } });
+      var called = 0;
+
+      httpTestComApi.add('/user');
+      httpTestCom.add(httpTestComApi);
+
+      httpTestCom.add('/');
+      main.add(httpTestCom);
+
+      main.on('test', function onTest() {
+        called++;
+      });
+
+      return main.run().then(function allDone() {
+        called.should.equal(2);
+      });
+    });
+
+    it('also works as a stream', function streamTest(done) {
+      var suite = new Suite();
+      var called = 0;
+
+      suite.add(baseUrl + '/');
+      suite.add(baseUrl + '/api/user');
+
+      suite.runAsStream()
+        .on('end', function onEnd() {
+          called.should.equal(2);
+          done();
+        })
+        .pipe(through2.obj(function handle(test, encoding, next) {
+          called++;
+          next();
+        }))
+      ;
+    });
   });
 });
