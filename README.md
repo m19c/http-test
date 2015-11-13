@@ -9,7 +9,9 @@ A simple and robust way to test your http endpoints.
 npm i --save http-test
 ```
 
-# Example
+# Examples
+Checkout the [examples directory](https://github.com/MrBoolean/http-test/tree/master/example).
+
 ## Using promises
 ```javascript
 var ht = require('http-test');
