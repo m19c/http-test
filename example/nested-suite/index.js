@@ -1,4 +1,5 @@
 var ht = require('../../');
+var createReporter = require('../create-reporter');
 var main = ht({ name: 'Main Suite' });
 var jpa;
 var google;
@@ -40,7 +41,24 @@ main
 ;
 
 main.run()
-  .then(function handleResult(result) {
-    console.log(JSON.stringify(result, null, 2));
+  .then(function(result) {
+    function createWalker(suite) {
+      var reporter = createReporter(suite);
+
+      return function walk(item) {
+        var stack;
+
+        if (item.tests) {
+          stack = (suite) ? [suite] : [];
+          stack.push(item.suite.name);
+
+          return item.tests.forEach(createWalker(stack.join(' > ')));
+        }
+
+        reporter(item);
+      };
+    }
+
+    result.tests.forEach(createWalker(result.suite.name));
   })
 ;

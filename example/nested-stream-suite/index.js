@@ -1,7 +1,6 @@
 var ht = require('../../');
+var reporter = require('../create-reporter')();
 var through2 = require('through2');
-var util = require('util');
-var os = require('os');
 var stream;
 var main = ht({ name: 'Main Suite' });
 var jpa;
@@ -46,8 +45,7 @@ main
 stream = main.runAsStream();
 stream
   .pipe(through2.obj(function eachTest(test, encoding, next) {
-    this.push(util.format('%s > %s [%s]', '', test.res.request.uri.href, test.status.status) + os.EOL);
+    reporter(test);
     next();
   }))
-  .pipe(process.stdout)
 ;

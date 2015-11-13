@@ -1,11 +1,12 @@
 var ht = require('../../');
-var os = require('os');
+var name = 'Google';
 var through2 = require('through2');
+var reporter = require('../create-reporter')(name);
 var stream;
 var suite = ht({
-  name: 'GodmodeTrader',
+  name: name,
   req: {
-    baseUrl: 'http://www.godmode-trader.de'
+    baseUrl: 'http://www.google.de'
   },
   spec: {
     thresholds: [
@@ -18,12 +19,12 @@ var suite = ht({
 });
 
 suite.add('/');
-suite.add('/');
+suite.add('/mail');
 
 stream = suite.runAsStream();
 stream
   .pipe(through2.obj(function eachTest(test, encoding, next) {
-    this.push(JSON.stringify(test, null, 2) + os.EOL);
+    reporter(test);
     next();
   }))
   .pipe(process.stdout)

@@ -1,11 +1,12 @@
 var ht = require('../../');
+var reporter = require('../create-reporter')();
 var suite = ht({
   name: 'JsonPlaceholder API',
   spec: {
     thresholds: [
-      { threshold: 50, mark: ht.PASSED, flags: ['fast'] },
-      { threshold: 100, mark: ht.PASSED, flags: ['ok'] },
-      { threshold: 500, mark: ht.FAILED, flags: ['fast'] }
+      { threshold: 200, mark: ht.PASSED, flags: ['fast'] },
+      { threshold: 500, mark: ht.PASSED, flags: ['ok'] },
+      { threshold: 1000, mark: ht.FAILED, flags: ['awful'] }
     ]
   }
 });
@@ -21,7 +22,5 @@ suite.run()
   .then(function(item) {
     return item.tests;
   })
-  .each(function(test) {
-    console.log(test.req.url, test.status);
-  })
+  .each(reporter)
 ;
