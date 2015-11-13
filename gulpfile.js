@@ -3,6 +3,7 @@ var eslint = require('gulp-eslint');
 var mocha = require('gulp-mocha');
 var istanbul = require('gulp-istanbul');
 var codeclimate = require('gulp-codeclimate-reporter');
+var path = require('path');
 
 gulp.task('lint', function lintJs() {
   return gulp
@@ -52,6 +53,7 @@ gulp.task('codeclimate', function sendToCodeclimate() {
   return gulp
     .src(['dist/report/lcov.info'], { read: false })
     .pipe(codeclimate({
+      executable: path.join(process.cwd(), 'node_modules', '.bin', 'codeclimate-test-reporter'),
       token: '62640c23195506f0182de9ce4c7e616c088c266f630e596b5c4a1f44bc580bea'
     }))
   ;
