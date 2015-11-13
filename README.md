@@ -10,6 +10,7 @@ npm i --save http-test
 ```
 
 # Example
+## Using promises
 ```javascript
 var ht = require('http-test');
 
@@ -22,6 +23,25 @@ ht({
   .then(function(result) {
     // ...
   })
+;
+```
+
+## Using streams
+```javascript
+var ht = require('http-test');
+var through2 = require('through2');
+
+ht({
+  name: 'http-test'
+})
+  .add('http://www.google.com')
+  .add('http://www.creativemarket.com')
+  .runAsStream()
+  .pipe(through2.obj(function(item, encoding, next) {
+    this.push(JSON.stringify(item, null, 2));
+    next();
+  }))
+  .pipe(process.stdout)
 ;
 ```
 
