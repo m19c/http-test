@@ -31,7 +31,11 @@ describe('http-test/test', function testTestSuite() {
       var test = new Test(options);
 
       test.req.should.deepEqual(options.req);
-      test.spec.should.deepEqual(options.spec);
+      test.should.propertyByPath('spec', 'thresholds', 0).eql({
+        threshold: 1337,
+        mark: Test.PASSED,
+        flags: []
+      });
     });
 
     it('accepts a suite as the second argument', function suiteSecondArgumentTest() {

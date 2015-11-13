@@ -16,7 +16,12 @@ describe('http-test/suite', function suiteTestSuite() {
       var suite = new Suite(options);
 
       suite.req.should.deepEqual(options.req);
-      suite.spec.should.deepEqual(options.spec);
+
+      suite.should.propertyByPath('spec', 'thresholds', 0).eql({
+        threshold: 1337,
+        mark: Test.PASSED,
+        flags: []
+      });
     });
 
     it('opens `tests` as a empty array', function openEmptyTestsArrayTest() {
@@ -74,9 +79,43 @@ describe('http-test/suite', function suiteTestSuite() {
   });
 
   describe('#add', function addTestSuite() {
-    it('accepts a string');
-    it('accepts another suite');
-    it('accepts an instance of `Test`');
+    it('accepts a string', function stringTest() {
+      var suite = new Suite();
+
+      suite.add('http://www.google.com');
+
+      suite.tests.should.have.length(1);
+      suite.should.have.propertyByPath('tests', 0, 'req', 'url').equal('http://www.google.com');
+    });
+
+    it('accepts another suite', function anotherSuiteTest() {
+      var suiteA = new Suite();
+      var suiteB = new Suite();
+
+      suiteA.add(suiteB);
+
+      suiteA.tests.should.have.length(1);
+      suiteA.should.have.propertyByPath('tests', 0).equal(suiteB);
+    });
+
+    it('accepts an instance of `Test`', function testAddTest() {
+      var suite = new Suite();
+      var test = new Test();
+
+      suite.add(test);
+
+      suite.tests.should.have.length(1);
+      suite.should.have.propertyByPath('tests', 0).equal(test);
+    });
+
+    it('accepts an object', function objectTest() {
+      var suite = new Suite();
+
+      suite.add({ req: { url: 'http://www.google.com' } });
+
+      suite.tests.should.have.length(1);
+      suite.should.have.propertyByPath('tests', 0, 'req', 'url').equal('http://www.google.com');
+    });
   });
 
   describe('#run', function runTestSuite() {

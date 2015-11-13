@@ -37,7 +37,7 @@ Test.prototype.run = function run() {
 
   return request(current.req)
     .then(function handleRes(res) {
-      current.res = res.toJSON();
+      current.res = res;
       test.suite.emit('response', current);
 
       return Promise.resolve(current);

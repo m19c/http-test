@@ -17,14 +17,14 @@ module.exports = function validate(item) {
   };
 
   if (item.err instanceof Error) {
-    result.status = 'inavlid';
+    result.status = 'invalid';
   }
 
   if (item.res && !isSuccess(item.res.statusCode)) {
     result.status = 'failed';
   }
 
-  if (item.status === 'passed' && item.spec.thresholds && item.spec.thresholds.length > 0) {
+  if (result.status === 'passed' && item.spec.thresholds && item.spec.thresholds.length > 0) {
     thresholds = clone(item.spec.thresholds);
     thresholds.sort(function sortByThreshold(thresholdA, thresholdB) {
       return thresholdA.threshold > thresholdB.threshold;

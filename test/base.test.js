@@ -8,14 +8,17 @@ describe('http-test/base', function baseTestSuite() {
     });
 
     it('applies `options.spec` with the property `spec`', function appliesThresholdsTest() {
-      var threshold = { threshold: 1337, mark: false };
       var base = new Base({ spec: {
         thresholds: [
-          threshold
+          { threshold: 1337, mark: false }
         ]
       } });
 
-      base.spec.thresholds.should.deepEqual([threshold]);
+      base.should.propertyByPath('spec', 'thresholds', 0).eql({
+        threshold: 1337,
+        mark: Base.FAILED,
+        flags: []
+      });
     });
   });
 

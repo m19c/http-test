@@ -3,12 +3,22 @@ var isNumber = require('lodash.isnumber');
 var isBoolean = require('lodash.isboolean');
 
 function Base(options) {
+  var self = this;
+
   options = options || {};
 
   this.req = defaults({}, options.req || {});
-  this.spec = defaults({
+  this.spec = {
     thresholds: []
-  }, options.spec);
+  };
+
+  if (options.spec && options.spec.thresholds && options.spec.thresholds.length > 0) {
+    options.spec.thresholds.forEach(function eachThreshold(item) {
+      self.threshold(item.threshold, item.mark, item.flags);
+    });
+
+    delete options.spec.thresholds;
+  }
 }
 
 Base.PASSED = 'passed';
