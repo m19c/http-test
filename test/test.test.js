@@ -42,46 +42,6 @@ describe('http-test/test', function testTestSuite() {
     });
   });
 
-  describe('#threshold', function thresholdTestSuite() {
-    it('requires at least one argument (ms)', function atLeastOneArgumentTest() {
-      (function shouldThrow() {
-        var test = new Test();
-        test.threshold();
-      }).should.throw(Error);
-    });
-
-    it('accepts the second argument as a boolean value and translate it into a valid mark', function markBooleanTest() {
-      var testA = new Test();
-      var testB = new Test();
-
-      testA.threshold(10, true);
-      testB.threshold(10, false);
-
-      testA.spec.thresholds.should.deepEqual([
-        { threshold: 10, mark: Test.PASSED, flags: [] }
-      ]);
-
-      testB.spec.thresholds.should.deepEqual([
-        { threshold: 10, mark: Test.FAILED, flags: [] }
-      ]);
-    });
-
-    it('accepts 3 arguments', function fullArgumentStackTest() {
-      var test = new Test();
-      test.threshold(10, Test.PASSED, ['a', 'b', 'c']);
-
-      test.spec.thresholds.should.have.length(1);
-      test.spec.thresholds.should.have.deepEqual([
-        { threshold: 10, mark: Test.PASSED, flags: ['a', 'b', 'c'] }
-      ]);
-    });
-
-    it('returns an instance of `Test`', function returnTest() {
-      var test = new Test();
-      (test.threshold(1337)).should.equal(test);
-    });
-  });
-
   describe('#run', function runTestSuite() {
     it('returns a promise');
   });

@@ -16,6 +16,8 @@ var Base = require('./base');
  * @param {object} options
  */
 function Suite(options) {
+  var self = this;
+
   options = options || {};
 
   Suite.super_.apply(this, [options]);
@@ -23,7 +25,14 @@ function Suite(options) {
   this._ee = new EventEmitter();
   this.name = options.name || null;
   this.description = options.description || null;
-  this.tests = options.tests || [];
+
+  this.tests = [];
+
+  if (options.tests) {
+    options.tests.forEach(function eachTest(test) {
+      self.add(test);
+    });
+  }
 }
 
 inherit(Suite, Base);

@@ -4,10 +4,8 @@
 
 var Promise = require('bluebird');
 var request = Promise.promisify(require('request'));
-var isNumber = require('lodash.isnumber');
 var inherit = require('util').inherits;
 var merge = require('lodash.merge');
-var isBoolean = require('lodash.isboolean');
 var validate = require('./util/validate');
 var Base = require('./base');
 
@@ -21,27 +19,9 @@ function Test(options, suite) {
 
 inherit(Test, Base);
 
-Test.PASSED = 'passed';
-Test.FAILED = 'failed';
-Test.INVALID = 'invalid';
-
-Test.prototype.threshold = function threshold(ms, mark, flags) {
-  if (!isNumber(ms)) {
-    throw new Error('Argument one passed to `threshold` must be a number');
-  }
-
-  if (isBoolean(mark)) {
-    mark = (mark) ? Test.PASSED : Test.FAILED;
-  }
-
-  this.spec.thresholds.push({
-    threshold: ms,
-    mark: mark || Test.PASSED,
-    flags: flags || []
-  });
-
-  return this;
-};
+Test.PASSED = Base.PASSED;
+Test.FAILED = Base.FAILED;
+Test.INVALID = Base.INVALID;
 
 Test.prototype.run = function run() {
   var test = this;
