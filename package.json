@@ -1,7 +1,7 @@
 {
   "name": "http-test",
-  "description": "",
-  "version": "0.0.1",
+  "description": "A simple and robust way to test your http endpoints",
+  "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "test": "gulp"
