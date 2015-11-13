@@ -58,7 +58,19 @@ describe('http-test/suite', function suiteTestSuite() {
   });
 
   describe('#off', function offTestSuite() {
-    it('unbinds an existing listener');
+    it('unbinds an existing listener', function unbindListenerTest() {
+      var suite = new Suite();
+
+      function onRequest() {}
+
+      suite.on('request', onRequest);
+
+      suite._ee._events.should.have.property('request');
+      suite._ee._events.request.should.equal(onRequest);
+
+      suite.off('request', onRequest);
+      suite._ee._events.should.not.have.property('request');
+    });
   });
 
   describe('#add', function addTestSuite() {
